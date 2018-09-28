@@ -1,0 +1,18 @@
+<form novalidate (ngSubmit)="onSubmit()">
+	<div [formGroup]="currentForm">
+		<h4>{{currentForm.controls.role.value}}</h4>
+		<div *ngFor="let question of questions" class="form-group" role="group">
+			<label>{{question.label}}</label>
+			<small class="form-text text-muted" role="help"></small>
+			<div class="input-group mb-2 mr-sm-2">
+				<div class="input-group-prepend" *ngIf="question.type === 'currency'">
+					<div class="input-group-text">$</div>
+				</div>
+				<input type="number" class="form-control" [formControlName]="question.key" [id]="question.key">
+			</div>
+		</div>
+	</div>
+	<!-- <button *ngIf="currentPage == respondents.length - 1" role="button" type="submit" class="btn btn-primary float-right" id="submitBtn" aria-label="Submit Form" title="Submit Form">Submit</button> -->
+	<button type="submit" class="btn btn-primary float-right" id="submitBtn" aria-label="Submit Form" title="Submit Form">Submit</button>
+</form>
+<ngb-pagination [collectionSize]="respondents.length * 10" (pageChange)="changeForm($event)" aria-label="Default pagination"></ngb-pagination>
