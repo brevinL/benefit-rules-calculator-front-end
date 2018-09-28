@@ -72,35 +72,41 @@ export class FormComponent implements OnInit {
 			});
 	}
 
-	prepareToSaveRespondents(forms: FormArray): Respondent[] {
-		const formModel = forms.value;
+	prepareToSaveRespondent(form: FormGroup): Respondent[] {
+		const formModel = form.value;
 		const respondents: Respondent[] = formModel.map((person) => { 
 			return new Respondent({
-				year_of_birth: 1954,
-				years_of_covered_earnings: person.years_of_covered_earnings as number,
-				annual_covered_earning: new Money(person.annual_covered_earning as number),
-				years_of_non_covered_earnings: person.years_of_non_covered_earnings as number,
-				annual_non_covered_earning: new Money(person.annual_non_covered_earning as number),
-				fraction_of_non_covered_aime_to_non_covered_pension: person.fraction_of_non_covered_aime_to_non_covered_pension as number,
-				early_retirement_reduction: person.early_retirement_reduction as number,
-				delay_retirement_credit: person.delay_retirement_credit as number,
-				survivor_early_retirement_reduction: person.survivor_early_retirement_reduction as number,
-				spousal_early_retirement_reduction: person.spousal_early_retirement_reduction as number
+				year_of_birth: 1954
 			});
 		});
 		return respondents;
 	}
 
+	prepareToSaveRecord(form: FormGroup): any {
+		const formModel = form.value;
+		let record = new Record({
+			person_id: 1,
+			year_of_birth: 1954,
+			basic_primary_insurance_amount: new Money(formModel.years_of_covered_earnings as number),
+			monthly_non_covered_pension: new Money(formModel.annual_covered_earning as number),
+			early_retirement_reduction: 0.00,
+			delay_retirement_credit: 0.00,
+			wep_reduction: new Money(0.00)
+		});
+		return record;
+	}
+
 	//take care of content_object dynamically
-	prepareToSaveRelationship(respondents: Respondent[], forms: FormArray): Relationship {
-		const formModel = forms.value;
+	prepareToSaveRelationship(person1: Respondent, person2: Respondent, person1Form: any, person2Form: any): Relationship {
+		const person1formModel = person1Form.value;
+		const person2formModel = person2Form.value;
 		const relationship: Relationship = new Relationship({
-				content_object1: `/api/neo-and-nde-benefit-calculator/respondent/${respondents[0].id}/`,
-				content_object2: `/api/neo-and-nde-benefit-calculator/respondent/${respondents[1].id}/`,
-				object_id1: respondents[0].id, 
-				object_id2: respondents[1].id, 
-				person1_role: formModel[0].role,
-				person2_role: formModel[1].role,
+				content_object1: `/api/neo-and-nde-benefit-calculator/respondent/${person1.id}/`,
+				content_object2: `/api/neo-and-nde-benefit-calculator/respondent/${person2.id}/`,
+				object_id1: person1.id, 
+				object_id2: person2.id, 
+				person1_role: person1formModel.role,
+				person2_role: person2formModel.role,
 				relationship_type: RelationshipType.MARRIED
 			});
 

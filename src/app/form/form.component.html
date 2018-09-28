@@ -12,7 +12,6 @@
 			</div>
 		</div>
 	</div>
-	<!-- <button *ngIf="currentPage == respondents.length - 1" role="button" type="submit" class="btn btn-primary float-right" id="submitBtn" aria-label="Submit Form" title="Submit Form">Submit</button> -->
 	<button type="submit" class="btn btn-primary float-right" id="submitBtn" aria-label="Submit Form" title="Submit Form">Submit</button>
 </form>
 <ngb-pagination [collectionSize]="respondents.length * 10" (pageChange)="changeForm($event)" aria-label="Default pagination"></ngb-pagination>

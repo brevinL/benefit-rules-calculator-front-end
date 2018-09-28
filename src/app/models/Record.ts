@@ -4,21 +4,21 @@ import { Instruction } from './Instruction';
 export interface IRecord {
 	person_id: number;
 	year_of_birth: number;
-	earliest_retirement_age: number;
-	normal_retirement_age: number;
-	average_indexed_monthly_covered_earning: Money;
-	basic_primary_insurance_amount: Money;
-	wep_primary_insurance_amount: Money;
-	average_indexed_monthly_non_covered_earning: Money;
-	monthly_non_covered_pension: Money;
-	wep_reduction: Money;
-	final_primary_insurance_amount: Money;
-	delay_retirement_credit: number;
-	early_retirement_reduction: number;
-	benefit: Money;
-	government_pension_offset: Money;
-	spousal_insurance_benefit: Money;
-	survivor_insurance_benefit: Money;
+	earliest_retirement_age?: number;
+	normal_retirement_age?: number;
+	average_indexed_monthly_covered_earning?: Money;
+	basic_primary_insurance_amount?: Money;
+	wep_primary_insurance_amount?: Money;
+	average_indexed_monthly_non_covered_earning?: Money;
+	monthly_non_covered_pension?: Money;
+	wep_reduction?: Money;
+	final_primary_insurance_amount?: Money;
+	delay_retirement_credit?: number;
+	early_retirement_reduction?: number;
+	benefit?: Money;
+	government_pension_offset?: Money;
+	spousal_insurance_benefit?: Money;
+	survivor_insurance_benefit?: Money;
 }
 
 export class Record implements IRecord {
