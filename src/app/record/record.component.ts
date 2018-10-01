@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
-import { Record } from '../models';
-import { CalculatorService } from '../calculator.service';
+import { Record, Money } from '../models';
+import { BenefitRuleService } from '../benefit-rule.service';
 
 @Component({
 	selector: 'record',
@@ -13,11 +13,18 @@ import { CalculatorService } from '../calculator.service';
 export class RecordComponent implements OnInit {
 	@Input() respondent_id: number;
 	record: Record;
+	config = {
+		'config': {
+				'partial_update': true,
+				'non_covered_earning_available': false,
+				'covered_earning_available': false
+			}
+		}
 
-	constructor(private calculatorService: CalculatorService) { }
+	constructor(private benefitRuleService: BenefitRuleService) { }
 
 	ngOnInit() {
-		this.calculatorService.getRecord(this.respondent_id)
+		this.benefitRuleService.getRecord(this.respondent_id, this.config)
 			.subscribe(record => {
 				this.record = record;
 			})

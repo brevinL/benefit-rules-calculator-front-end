@@ -4,7 +4,6 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { QuestionService } from '../shared/question.service';
 import { QuestionControlService } from '../shared/question-control.service';
 import { Record, DetailRecord, Respondent, Money, Role, Relationship, RelationshipType } from '../models';
-import { CalculatorService } from '../calculator.service';
 import { BenefitRuleService } from '../benefit-rule.service';
 import { zip } from 'rxjs';
 
@@ -13,39 +12,36 @@ import { zip } from 'rxjs';
 	templateUrl: './form.component.html',
 	styleUrls: ['./form.component.css'],
 	encapsulation: ViewEncapsulation.None,
-	providers: [ BenefitRuleService, CalculatorService ]
+	providers: [ BenefitRuleService ]
 })
 export class FormComponent implements OnInit {
 	questions: any[];
-	respondents: FormArray;
-	currentForm: FormGroup;
-	currentPage: number = 0; 
+	form: FormGroup;
 
 	constructor(
 		private fb: FormBuilder, 
 		private questionService: QuestionService, 
 		private qcs: QuestionControlService,
-		private calculatorService: CalculatorService,
 		private benefitRuleService: BenefitRuleService,
 		private router: Router) { }
 
 	ngOnInit() {
 		this.scrollToTop();
 		this.questions = this.questionService.questions;
-		this.respondents = this.buildRespondentForms();
-		this.currentForm = this.respondents.at(0) as FormGroup;
+		this.form = this.buildRelationshipFormGroup();
 	}
 
-	buildRespondentForms(): FormArray {
-		return this.fb.array([
-			this.initPerson(Role.BENEFICIARY),
-			this.initPerson(Role.SPOUSE)
-		]);
+	buildRelationshipFormGroup(): FormGroup {
+		return this.fb.group({
+			person1: this.buildPersonFormGroup(),
+			person2: this.buildPersonFormGroup(),
+			person1_role: this.fb.control(Role.BENEFICIARY),
+			person2_role: this.fb.control(Role.SPOUSE)
+		});
 	}
 
-	initPerson(role: string): FormGroup { 
+	buildPersonFormGroup(): FormGroup { 
 		let formGroup = this.qcs.toFormGroup(this.questions);
-		formGroup.addControl('role', this.fb.control(role));
 		return formGroup;
 	}
 
@@ -53,42 +49,42 @@ export class FormComponent implements OnInit {
 		window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
 	}
 
-	changeForm(currentPage: number) {
-		this.currentPage = currentPage - 1;
-		this.currentForm = this.respondents.at(this.currentPage) as FormGroup;
-		this.scrollToTop();
-	}
-
 	onSubmit(): void {
-		let respondents: Respondent[] = this.prepareToSaveRespondents(this.respondents);
-		
-		let respondent1$ = this.calculatorService.addRespondent(respondents[0]);
-		let respondent2$ = this.calculatorService.addRespondent(respondents[1]);
-		zip(respondent1$, respondent2$, (respondent1, respondent2) => [respondent1 as Respondent, respondent2 as Respondent])
-			.subscribe(respondents => {
-				let relationship: Relationship = this.prepareToSaveRelationship(respondents as Respondent[], this.respondents);
-				this.benefitRuleService.addRelationship(relationship)
-					.subscribe(relationship => this.router.navigate(['/record', {relationship: relationship.id}]))
-			});
+		const formModel = this.form.value;
+
+		let person1: Respondent = this.prepareToSaveRespondent();
+		let person2: Respondent = this.prepareToSaveRespondent();
+		let person1_role: Role = formModel.person1_role;
+		let person2_role: Role = formModel.person2_role;
+
+		let relationship: Relationship = this.prepareToSaveRelationship(
+			person1, person2, person1_role, person2_role);
+		this.benefitRuleService.addRelationship(relationship)
+			.subscribe(relationship => {
+				let beneficiary_record: Record = this.prepareToSaveRecord(relationship.person1.id, formModel.person1);
+				let beneficiary_record$ = this.benefitRuleService.createRecord(beneficiary_record);
+
+				let spouse_record: Record = this.prepareToSaveRecord(relationship.person2.id, formModel.person2);
+				let spouse_record$ = this.benefitRuleService.createRecord(spouse_record);
+
+				zip(beneficiary_record$, spouse_record$)
+					.subscribe(() => this.router.navigate(['/record', {relationship: relationship.id}]))
+			})
 	}
 
-	prepareToSaveRespondent(form: FormGroup): Respondent[] {
-		const formModel = form.value;
-		const respondents: Respondent[] = formModel.map((person) => { 
-			return new Respondent({
-				year_of_birth: 1954
-			});
+	prepareToSaveRespondent(): Respondent {
+		const respondents: Respondent = new Respondent({
+			year_of_birth: 1954,
+			retirement_age: 66
 		});
 		return respondents;
 	}
 
-	prepareToSaveRecord(form: FormGroup): any {
-		const formModel = form.value;
+	prepareToSaveRecord(person: number, formModel: any): Record {
 		let record = new Record({
-			person_id: 1,
-			year_of_birth: 1954,
-			basic_primary_insurance_amount: new Money(formModel.years_of_covered_earnings as number),
-			monthly_non_covered_pension: new Money(formModel.annual_covered_earning as number),
+			person: person,
+			basic_primary_insurance_amount: new Money(formModel.basic_primary_insurance_amount as number),
+			monthly_non_covered_pension: new Money(formModel.monthly_non_covered_pension as number),
 			early_retirement_reduction: 0.00,
 			delay_retirement_credit: 0.00,
 			wep_reduction: new Money(0.00)
@@ -96,19 +92,14 @@ export class FormComponent implements OnInit {
 		return record;
 	}
 
-	//take care of content_object dynamically
-	prepareToSaveRelationship(person1: Respondent, person2: Respondent, person1Form: any, person2Form: any): Relationship {
-		const person1formModel = person1Form.value;
-		const person2formModel = person2Form.value;
+	prepareToSaveRelationship(person1: Respondent, person2: Respondent, person1_role: Role, person2_role: Role): Relationship {
 		const relationship: Relationship = new Relationship({
-				content_object1: `/api/neo-and-nde-benefit-calculator/respondent/${person1.id}/`,
-				content_object2: `/api/neo-and-nde-benefit-calculator/respondent/${person2.id}/`,
-				object_id1: person1.id, 
-				object_id2: person2.id, 
-				person1_role: person1formModel.role,
-				person2_role: person2formModel.role,
-				relationship_type: RelationshipType.MARRIED
-			});
+			person1: person1,
+			person2: person2,
+			person1_role: person1_role,
+			person2_role: person2_role,
+			relationship_type: RelationshipType.MARRIED
+		});
 
 		return relationship;
 	}

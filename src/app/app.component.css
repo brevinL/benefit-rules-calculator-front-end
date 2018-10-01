@@ -1,0 +1,23 @@
+.btn {
+	margin-top: 0em;
+	margin-bottom: 0em;
+}
+
+.keyboard-shortcut-help-btn {
+	margin-left: 1em;
+	margin-bottom: 1em;
+}
+
+#title-bar>.h2, #title-bar>h2 {
+    font-size: 1.5em;
+    font-family: initial;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	border-bottom: none;
+}
+
+ul li {
+    list-style-type: none !important;
+    margin-bottom: 0 !important; 
+}

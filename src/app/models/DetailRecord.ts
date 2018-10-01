@@ -59,7 +59,7 @@ export class DetailRecord implements IDetailRecord {
 	}
 
 	get procedure() {
-		return [
+		let tasks = [
 			{name: "Average Indexed Monthly Covered Earning", task: this.average_indexed_monthly_covered_earning_task, order: 1},
 			{name: "Basic Primary Insurance Amount", task: this.basic_primary_insurance_amount_task, order: 2},
 			{name: "Windfall Elimination Provision's Primary Insurance Amount", task: this.wep_primary_insurance_amount_task, order: 3},
@@ -74,5 +74,6 @@ export class DetailRecord implements IDetailRecord {
 			{name: "Spousal Insurance Benefit", task: this.spousal_insurance_benefit_task, order: 12},
 			{name: "Survivor Insurance Benefit", task: this.survivor_insurance_benefit_task, order: 13}
 		];
+		return tasks.filter(t => t.task.instruction_set.length > 0);
 	}
 }

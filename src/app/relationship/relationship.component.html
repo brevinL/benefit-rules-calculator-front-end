@@ -2,16 +2,16 @@
 	<div class="clearfix">
 		<h4>{{relationship.person1_role}}</h4>
 		<div [ngSwitch]="state">
-			<record *ngSwitchCase="'summary'" [respondent_id]="relationship.object_id1"></record>
-			<detail-record *ngSwitchCase="'step-by-step'" [respondent_id]="relationship.object_id1"></detail-record>
+			<record *ngSwitchCase="'summary'" [respondent_id]="relationship.person1.id"></record>
+			<detail-record *ngSwitchCase="'step-by-step'" [respondent_id]="relationship.person1.id"></detail-record>
 		</div>
 	</div>
 	<hr/>
 	<div class="clearfix">
 		<h4>{{relationship.person2_role}}</h4>
 		<div [ngSwitch]="state">
-			<record *ngSwitchCase="'summary'" [respondent_id]="relationship.object_id2"></record>
-			<detail-record *ngSwitchCase="'step-by-step'" [respondent_id]="relationship.object_id2"></detail-record>
+			<record *ngSwitchCase="'summary'" [respondent_id]="relationship.person2.id"></record>
+			<detail-record *ngSwitchCase="'step-by-step'" [respondent_id]="relationship.person2.id"></detail-record>
 		</div>
 	</div>
 </div>

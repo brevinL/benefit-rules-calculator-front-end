@@ -2,8 +2,7 @@ import { Money } from './Money';
 import { Instruction } from './Instruction';
 
 export interface IRecord {
-	person_id: number;
-	year_of_birth: number;
+	person: number;
 	earliest_retirement_age?: number;
 	normal_retirement_age?: number;
 	average_indexed_monthly_covered_earning?: Money;
@@ -22,8 +21,7 @@ export interface IRecord {
 }
 
 export class Record implements IRecord {
-	public person_id: number;
-	public year_of_birth: number;
+	public person: number;
 	public earliest_retirement_age: number;
 	public normal_retirement_age: number;
 	public average_indexed_monthly_covered_earning: Money;
@@ -41,8 +39,7 @@ export class Record implements IRecord {
 	public survivor_insurance_benefit: Money;
 
 	constructor(obj: IRecord) {
-		this.person_id = obj.person_id;
-		this.year_of_birth = obj.year_of_birth;
+		this.person = obj.person;
 		this.earliest_retirement_age = obj.earliest_retirement_age;
 		this.normal_retirement_age = obj.normal_retirement_age;
 		this.average_indexed_monthly_covered_earning = obj.average_indexed_monthly_covered_earning;

@@ -22,8 +22,7 @@ export class BenefitRuleService {
 	constructor(private http: HttpClient) {}
 
 	addRelationship(relationships: Relationship): Observable<Relationship> {
-		let request = JSON.stringify(relationships);
-		return this.http.post(`${API_URL}/${this.url}/relationship/`, request, headersConfig)
+		return this.http.post(`${API_URL}/${this.url}/relationship/`, JSON.stringify(relationships), headersConfig)
 			.pipe(
 				map((response: IRelationship) => new Relationship(response)),
 				catchError(this.handleError<Relationship>('addRelationship'))
@@ -35,6 +34,30 @@ export class BenefitRuleService {
 			.pipe(
 				map((response: IRelationship) => new Relationship(response)),
 				catchError(this.handleError<Relationship>('getRelationship'))
+			);
+	}
+
+	createRecord(record: Record): Observable<Record> {
+		return this.http.post(`${API_URL}/${this.url}/record/`, JSON.stringify(record), headersConfig)
+			.pipe(
+				map((response: IRecord) => new Record(response)),
+				catchError(this.handleError<Record>('getRecord'))
+			);
+	}
+
+	getRecord(id: number, config: object = {}): Observable<Record> {
+		return this.http.post(`${API_URL}/${this.url}/person/${id}/get_updated_record/`, config, headersConfig)
+			.pipe(
+				map((response: IRecord) => new Record(response)),
+				catchError(this.handleError<Record>('getRecord'))
+			);
+	}
+
+	getDetailRecord(id: number, config: object = {}): Observable<DetailRecord> {
+		return this.http.post(`${API_URL}/${this.url}/person/${id}/get_updated_detail_record/`, config, headersConfig)
+			.pipe(
+				map((response: IDetailRecord) => new DetailRecord(response)),
+				catchError(this.handleError<DetailRecord>('getDetailRecord'))
 			);
 	}
 

@@ -12,7 +12,7 @@ export class QuestionService {
 	get questions(): QuestionBase<number>[] {
 
 		let questions: QuestionBase<number>[] = [
-			new NumberQuestion({
+			new CurrencyQuestion({
 				key: 'basic_primary_insurance_amount',
 				value: '839.00',
 				label: 'Primary Insurance Amount',

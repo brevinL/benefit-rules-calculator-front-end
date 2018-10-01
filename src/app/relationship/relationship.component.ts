@@ -8,7 +8,6 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { CalculatorService } from '../calculator.service';
 import { BenefitRuleService } from '../benefit-rule.service';
 
 @Component({
@@ -22,6 +21,7 @@ export class RelationshipComponent implements OnInit {
 	relationship: Relationship;
 	state: string = 'summary';
 	private selectedId: number;
+
 	constructor(
 		private benefitRuleService: BenefitRuleService,
     	private route: ActivatedRoute,
