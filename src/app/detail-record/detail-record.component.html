@@ -1,16 +1,18 @@
-<div *ngIf="detail_record">
-	<ngb-accordion [closeOthers]="true" activeIds="static-0">
-		<ngb-panel id="static-{{i}}" title="{{benefitRule.name}}" *ngFor="let benefitRule of detail_record.procedure; index as i;">
-		  	<ng-template ngbPanelContent>
-				<ol>
-					<li *ngFor="let instruction of benefitRule.task.instruction_set; index as i;">
-						<span>{{instruction.description}}</span>
-						<ol>
-							<li type="a" *ngFor="let expression of instruction.expression_set">{{expression.description}}</li>
-						</ol>
-					</li>
-				</ol>
-			</ng-template>
-		</ngb-panel>
-	</ngb-accordion>
+<div [ngBusy]="busy">
+	<div *ngIf="detail_record">
+		<ngb-accordion [closeOthers]="true" activeIds="static-0">
+			<ngb-panel id="static-{{i}}" title="{{benefitRule.name}}" *ngFor="let benefitRule of detail_record.procedure; index as i;">
+			  	<ng-template ngbPanelContent>
+					<ol>
+						<li *ngFor="let instruction of benefitRule.task.instruction_set; index as i;">
+							<span>{{instruction.description}}</span>
+							<ol>
+								<li type="a" *ngFor="let expression of instruction.expression_set">{{expression.description}}</li>
+							</ol>
+						</li>
+					</ol>
+				</ng-template>
+			</ngb-panel>
+		</ngb-accordion>
+	</div>
 </div>

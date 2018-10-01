@@ -1,0 +1,25 @@
+<div [formGroup]="form">
+	<label [attr.for]="question.key">{{question.label}}</label>
+	<div [ngSwitch]="question.controlType">
+		<div *ngSwitchCase="'number'">
+			<small class="form-text text-muted" role="help">Enter a number that is {{!isEmpty(question.min)? 'greater than or equal to ' + question.min : ''}}{{(!isEmpty(question.min) && !isEmpty(question.max))? ' and ': ''}}{{!isEmpty(question.max)? 'less than or equal to ' + question.max : ''}}</small>
+			<div class="input-group mb-2 mr-sm-2">
+				<input type="number" class="form-control" [class.is-invalid]="!isValid && (questionCtrl.dirty || questionCtrl.touched)" [class.is-valid]="isValid && (questionCtrl.dirty || questionCtrl.touched)" [formControlName]="question.key" [id]="question.key" [required]="question.required" [min]="question.min" [max]="question.max" [gte]="question.min" [lte]="question.max">
+			</div>
+		</div>
+		<div *ngSwitchCase="'currency'">
+			<small class="form-text text-muted" role="help">Enter a number that is {{!isEmpty(question.min)? 'greater than or equal to ' + question.min : ''}}{{(!isEmpty(question.min) && !isEmpty(question.max))? ' and ': ''}}{{!isEmpty(question.max)? 'less than or equal to ' + question.max : ''}}</small>
+			<div class="input-group mb-2 mr-sm-2">
+				<div class="input-group-prepend">
+					<div class="input-group-text">$</div>
+				</div>
+				<input type="number" class="form-control" [class.is-invalid]="!isValid && (questionCtrl.dirty || questionCtrl.touched)" [class.is-valid]="isValid && (questionCtrl.dirty || questionCtrl.touched)" [formControlName]="question.key" [id]="question.key" [required]="question.required" [min]="question.min" [max]="question.max" [gte]="question.min" [lte]="question.max">
+			</div>
+		</div>
+		<div *ngIf="!isValid && (questionCtrl.dirty || questionCtrl.touched)" class="alert alert-danger" role="alert">
+			<span *ngIf="questionCtrl.errors?.required"><span class="sr-only">(Error) </span>{{question.label}} is required</span>
+			<span *ngIf="questionCtrl.errors?.min"><span class="sr-only">(Error) </span>Input must be greater than or equal to {{question.min}}</span>
+			<span *ngIf="questionCtrl.errors?.max"><span class="sr-only">(Error) </span>Input must be less than or equal to {{question.max}}</span>
+		</div>
+	</div>
+</div>

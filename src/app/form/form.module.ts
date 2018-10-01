@@ -7,8 +7,10 @@ import { SharedModule } from '../shared/shared.module';
 import { FormComponent } from './form.component';
 import { QuestionService } from '../shared/question.service';
 import { QuestionControlService } from '../shared/question-control.service';
+import { FormQuestionModule } from '../form-question/form-question.module';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgBusyModule } from 'ng-busy';
 
 @NgModule({
 	imports: [ 
@@ -17,7 +19,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 		FormsModule, 
 		ReactiveFormsModule,
 		FormRoutingModule,
-		NgbModule
+		NgbModule,
+		FormQuestionModule,
+		NgBusyModule
 	],
 	exports: [ FormComponent ],
 	declarations: [ FormComponent ],

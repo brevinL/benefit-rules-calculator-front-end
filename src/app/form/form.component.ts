@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { QuestionService } from '../shared/question.service';
 import { QuestionControlService } from '../shared/question-control.service';
 import { Record, DetailRecord, Respondent, Money, Role, Relationship, RelationshipType } from '../models';
 import { BenefitRuleService } from '../benefit-rule.service';
-import { zip } from 'rxjs';
+import { Subscription, zip } from 'rxjs';
 
 @Component({
 	selector: 'calculator-form',
@@ -14,9 +14,11 @@ import { zip } from 'rxjs';
 	encapsulation: ViewEncapsulation.None,
 	providers: [ BenefitRuleService ]
 })
-export class FormComponent implements OnInit {
+export class FormComponent implements OnInit, OnDestroy {
 	questions: any[];
-	form: FormGroup;
+	relationshipForm: FormGroup;
+	hasSubmitted: boolean = false;
+	busy: Subscription;
 
 	constructor(
 		private fb: FormBuilder, 
@@ -28,7 +30,7 @@ export class FormComponent implements OnInit {
 	ngOnInit() {
 		this.scrollToTop();
 		this.questions = this.questionService.questions;
-		this.form = this.buildRelationshipFormGroup();
+		this.relationshipForm = this.buildRelationshipFormGroup();
 	}
 
 	buildRelationshipFormGroup(): FormGroup {
@@ -49,27 +51,40 @@ export class FormComponent implements OnInit {
 		window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
 	}
 
+	markAllControlAsTouched(formGroup: FormGroup) {
+		for(let key of Object.keys(formGroup.controls)) {
+			formGroup.get(key).markAsTouched();
+		}
+	}
+
 	onSubmit(): void {
-		const formModel = this.form.value;
+		if(this.relationshipForm.valid) {
+			const formModel = this.relationshipForm.value;
 
-		let person1: Respondent = this.prepareToSaveRespondent();
-		let person2: Respondent = this.prepareToSaveRespondent();
-		let person1_role: Role = formModel.person1_role;
-		let person2_role: Role = formModel.person2_role;
+			let person1: Respondent = this.prepareToSaveRespondent();
+			let person2: Respondent = this.prepareToSaveRespondent();
+			let person1_role: Role = formModel.person1_role;
+			let person2_role: Role = formModel.person2_role;
 
-		let relationship: Relationship = this.prepareToSaveRelationship(
-			person1, person2, person1_role, person2_role);
-		this.benefitRuleService.addRelationship(relationship)
-			.subscribe(relationship => {
-				let beneficiary_record: Record = this.prepareToSaveRecord(relationship.person1.id, formModel.person1);
-				let beneficiary_record$ = this.benefitRuleService.createRecord(beneficiary_record);
+			let relationship: Relationship = this.prepareToSaveRelationship(
+				person1, person2, person1_role, person2_role);
+			this.benefitRuleService.addRelationship(relationship)
+				.subscribe(relationship => {
+					let beneficiary_record: Record = this.prepareToSaveRecord(relationship.person1.id, formModel.person1);
+					let beneficiary_record$ = this.benefitRuleService.createRecord(beneficiary_record);
 
-				let spouse_record: Record = this.prepareToSaveRecord(relationship.person2.id, formModel.person2);
-				let spouse_record$ = this.benefitRuleService.createRecord(spouse_record);
+					let spouse_record: Record = this.prepareToSaveRecord(relationship.person2.id, formModel.person2);
+					let spouse_record$ = this.benefitRuleService.createRecord(spouse_record);
 
-				zip(beneficiary_record$, spouse_record$)
-					.subscribe(() => this.router.navigate(['/record', {relationship: relationship.id}]))
-			})
+					zip(beneficiary_record$, spouse_record$)
+						.subscribe(() => this.router.navigate(['/record', {relationship: relationship.id}]))
+				});
+		} else {
+			this.markAllControlAsTouched(this.relationshipForm.controls.person1 as FormGroup);
+			this.markAllControlAsTouched(this.relationshipForm.controls.person2 as FormGroup);
+		}
+		this.hasSubmitted = true;
+		this.scrollToTop();
 	}
 
 	prepareToSaveRespondent(): Respondent {
@@ -102,5 +117,9 @@ export class FormComponent implements OnInit {
 		});
 
 		return relationship;
+	}
+
+	ngOnDestroy() {
+		if(this.busy != null) { this.busy.unsubscribe(); }
 	}
 }

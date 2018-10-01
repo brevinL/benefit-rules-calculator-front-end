@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeyModule } from 'angular2-hotkeys';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { FormModule } from './form/form.module';
 import { RelationshipModule } from './relationship/relationship.module';
@@ -23,10 +24,13 @@ import { RelationshipModule } from './relationship/relationship.module';
 		}),
 		AppRoutingModule, 
 		BrowserModule, 
+		BrowserAnimationsModule,
 		NgbModule.forRoot(),
 		HotkeyModule.forRoot(),
 		
-		FormModule	],
+		FormModule,
+		RelationshipModule	
+	],
 	providers: [ ],
 	bootstrap: [ AppComponent ]
 })

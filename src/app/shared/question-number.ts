@@ -1,13 +1,14 @@
 import { QuestionBase } from './question-base';
 
 export class NumberQuestion extends QuestionBase<number> {
-  type: string;
-  limits;
+  controlType: string = 'number';
+  min: number;
+  max: number;
 
   constructor(options: {} = {}) {
     super(options);
-    this.type = 'number';
-    this.limits = options['limits'] || [];
+	this.min = options['min'];
+    this.max = options['max'];
   }
 }
 

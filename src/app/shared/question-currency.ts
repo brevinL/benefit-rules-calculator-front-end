@@ -1,9 +1,10 @@
 import { NumberQuestion } from './question-number';
 
 export class CurrencyQuestion extends NumberQuestion {
+  controlType = 'currency';
+
   constructor(options: {} = {}) {
     super(options);
-    this.type = 'currency';
   }
 }
 

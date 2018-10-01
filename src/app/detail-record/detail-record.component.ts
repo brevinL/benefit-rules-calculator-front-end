@@ -1,7 +1,8 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Location } from '@angular/common';
 import { DetailRecord } from '../models';
 import { BenefitRuleService } from '../benefit-rule.service';
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'detail-record',
@@ -9,9 +10,10 @@ import { BenefitRuleService } from '../benefit-rule.service';
 	styleUrls: ['./detail-record.component.css'],
 	encapsulation: ViewEncapsulation.None
 })
-export class DetailRecordComponent implements OnInit {
+export class DetailRecordComponent implements OnInit, OnDestroy {
 	@Input() respondent_id: number;
 	detail_record: DetailRecord;
+	busy: Subscription;
 	config = {
 		'config': {
 				'partial_update': true,
@@ -23,9 +25,13 @@ export class DetailRecordComponent implements OnInit {
 	constructor(private benefitRuleService: BenefitRuleService) { }
 
 	ngOnInit() {
-		this.benefitRuleService.getDetailRecord(this.respondent_id, this.config)
+		this.busy = this.benefitRuleService.getDetailRecord(this.respondent_id, this.config)
 			.subscribe(detail_record => {
 				this.detail_record = detail_record;
 			})
+	}
+
+	ngOnDestroy() {
+		if(this.busy != null) { this.busy.unsubscribe(); }
 	}
 }

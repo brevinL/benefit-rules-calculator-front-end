@@ -14,17 +14,19 @@ export class QuestionService {
 		let questions: QuestionBase<number>[] = [
 			new CurrencyQuestion({
 				key: 'basic_primary_insurance_amount',
-				value: '839.00',
+				value: '',
 				label: 'Primary Insurance Amount',
 				required: true,
-				order: 1
+				order: 1,
+				min: 0
 			}),
 			new CurrencyQuestion({
 				key: 'monthly_non_covered_pension',
-				value: '1595.00',
+				value: '',
 				label: 'Monthly Non-Covered Pension',
 				required: true,
-				order: 2
+				order: 2,
+				min: 0
 			})
 		];
 

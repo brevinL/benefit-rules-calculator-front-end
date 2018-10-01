@@ -5,12 +5,14 @@ import { RecordComponent } from './record.component';
 import { RecordRoutingModule } from './record-routing.module';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgBusyModule } from 'ng-busy';
 
 @NgModule({
 	imports: [
 		CommonModule,
 		RecordRoutingModule,
-		NgbModule
+		NgbModule,
+		NgBusyModule
 	],
 	declarations: [RecordComponent],
 	exports: [RecordComponent]

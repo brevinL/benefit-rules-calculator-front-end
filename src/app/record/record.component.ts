@@ -1,7 +1,8 @@
-import { Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewEncapsulation} from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { Record, Money } from '../models';
 import { BenefitRuleService } from '../benefit-rule.service';
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'record',
@@ -10,9 +11,10 @@ import { BenefitRuleService } from '../benefit-rule.service';
 	providers: [CurrencyPipe],
 	encapsulation: ViewEncapsulation.None
 })
-export class RecordComponent implements OnInit {
+export class RecordComponent implements OnInit, OnDestroy {
 	@Input() respondent_id: number;
 	record: Record;
+	busy: Subscription;
 	config = {
 		'config': {
 				'partial_update': true,
@@ -24,9 +26,13 @@ export class RecordComponent implements OnInit {
 	constructor(private benefitRuleService: BenefitRuleService) { }
 
 	ngOnInit() {
-		this.benefitRuleService.getRecord(this.respondent_id, this.config)
+		this.busy = this.benefitRuleService.getRecord(this.respondent_id, this.config)
 			.subscribe(record => {
 				this.record = record;
 			})
+	}
+
+	ngOnDestroy() {
+		if(this.busy != null) { this.busy.unsubscribe(); }
 	}
 }
