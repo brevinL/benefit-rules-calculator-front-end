@@ -10,7 +10,52 @@ export class QuestionService {
 	// TODO: get from a remote source of question metadata
 	// TODO: make asynchronous
 	get questions(): QuestionBase<number>[] {
+		let questions: QuestionBase<number>[] = [
+			new CurrencyQuestion({
+				key: 'basic_primary_insurance_amount',
+				value: '',
+				label: '1Primary Insurance Amount',
+				required: true,
+				order: 1,
+				min: 0
+			}),
+			new CurrencyQuestion({
+				key: 'monthly_non_covered_pension',
+				value: '',
+				label: 'Monthly Non-Covered Pension',
+				required: true,
+				order: 2,
+				min: 0
+			})
+		];
 
+		return questions.sort((a, b) => a.order - b.order);
+	}
+
+	get WindfallEliminationPensionQuestions(): QuestionBase<number>[] {
+		let questions: QuestionBase<number>[] = [
+			new CurrencyQuestion({
+				key: 'basic_primary_insurance_amount',
+				value: '',
+				label: 'Primary Insurance Amount',
+				required: true,
+				order: 1,
+				min: 0
+			}),
+			new CurrencyQuestion({
+				key: 'monthly_non_covered_pension',
+				value: '',
+				label: 'Monthly Non-Covered Pension',
+				required: true,
+				order: 2,
+				min: 0
+			})
+		];
+
+		return questions.sort((a, b) => a.order - b.order);
+	}
+
+	get GovernmentPensionOffsetQuestions(): QuestionBase<number>[] {
 		let questions: QuestionBase<number>[] = [
 			new CurrencyQuestion({
 				key: 'basic_primary_insurance_amount',

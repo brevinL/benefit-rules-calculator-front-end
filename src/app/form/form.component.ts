@@ -8,7 +8,7 @@ import { BenefitRuleService } from '../benefit-rule.service';
 import { Subscription, zip } from 'rxjs';
 
 @Component({
-	selector: 'calculator-form',
+	selector: 'benefit-rules-form',
 	templateUrl: './form.component.html',
 	styleUrls: ['./form.component.css'],
 	encapsulation: ViewEncapsulation.None,
@@ -21,15 +21,16 @@ export class FormComponent implements OnInit, OnDestroy {
 	busy: Subscription;
 
 	constructor(
-		private fb: FormBuilder, 
-		private questionService: QuestionService, 
-		private qcs: QuestionControlService,
-		private benefitRuleService: BenefitRuleService,
-		private router: Router) { }
+		protected fb: FormBuilder, 
+		protected questionService: QuestionService, 
+		protected qcs: QuestionControlService,
+		protected benefitRuleService: BenefitRuleService,
+		protected router: Router) { }
 
 	ngOnInit() {
 		this.scrollToTop();
 		this.questions = this.questionService.questions;
+		console.log(this.questions)
 		this.relationshipForm = this.buildRelationshipFormGroup();
 	}
 
