@@ -21,3 +21,11 @@ ul li {
     list-style-type: none !important;
     margin-bottom: 0 !important; 
 }
+
+.nav-tabs {
+	border-bottom: 1px none #dee2e6
+}
+
+.nav {
+	margin-bottom: 1rem
+}

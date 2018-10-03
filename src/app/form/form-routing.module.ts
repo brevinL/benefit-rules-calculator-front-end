@@ -7,15 +7,17 @@ const routes: Routes = [
     path: '',
     component: FormComponent,
     children: [
-		{ 
-			path:'government-pension-offset', 
-			loadChildren: 'app/form/gpo-form/gpo-form.module#GovernmentPensionOffsetFormModule' 
-		},
-		{ 
-			path:'windfall-elimination-pension', 
-			loadChildren: 'app/form/wep-form/wep-form.module#WindfallEliminationPensionFormModule' 
-		}
-	]
+    	{
+    		path: 'government-pension-offset',
+    		component: FormComponent,
+        data: { filter: 'government-pension-offset' }
+    	},
+    	{
+    		path: 'windfall-elimination-provision',
+    		component: FormComponent,
+        data: { filter: 'windfall-elimination-provision' }
+    	},
+    ]
   }
 ];
 

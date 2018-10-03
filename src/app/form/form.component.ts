@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { QuestionService } from '../shared/question.service';
 import { QuestionControlService } from '../shared/question-control.service';
 import { Record, DetailRecord, Respondent, Money, Role, Relationship, RelationshipType } from '../models';
 import { BenefitRuleService } from '../benefit-rule.service';
 import { Subscription, zip } from 'rxjs';
+import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
 
 @Component({
 	selector: 'benefit-rules-form',
@@ -25,12 +26,12 @@ export class FormComponent implements OnInit, OnDestroy {
 		protected questionService: QuestionService, 
 		protected qcs: QuestionControlService,
 		protected benefitRuleService: BenefitRuleService,
-		protected router: Router) { }
+		protected router: Router,
+		protected activatedRoute: ActivatedRoute) { }
 
 	ngOnInit() {
 		this.scrollToTop();
 		this.questions = this.questionService.questions;
-		console.log(this.questions)
 		this.relationshipForm = this.buildRelationshipFormGroup();
 	}
 

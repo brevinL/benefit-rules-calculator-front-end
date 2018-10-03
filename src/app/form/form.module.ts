@@ -27,7 +27,11 @@ import { NgBusyModule } from 'ng-busy';
 	declarations: [ FormComponent ],
 	providers: [ 
 		QuestionService, 
-		QuestionControlService 
+		QuestionControlService
 	]
 })
-export class FormModule { }
+export class FormModule { 
+	constructor(questionService: QuestionService) {
+		questionService.setFilter();
+	}
+}
