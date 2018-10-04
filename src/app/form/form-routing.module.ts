@@ -10,12 +10,18 @@ const routes: Routes = [
     	{
     		path: 'government-pension-offset',
     		component: FormComponent,
-        data: { filter: 'government-pension-offset' }
+        data: { 
+          title: 'Government Pension Offset Calculator',
+          filter: 'government-pension-offset'
+        }
     	},
     	{
     		path: 'windfall-elimination-provision',
     		component: FormComponent,
-        data: { filter: 'windfall-elimination-provision' }
+        data: { 
+          title: 'Windfall Elimination Provision Calculator',
+          filter: 'windfall-elimination-provision' 
+        }
     	},
     ]
   }

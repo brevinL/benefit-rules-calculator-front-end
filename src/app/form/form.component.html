@@ -1,21 +1,23 @@
-<div *ngIf="relationshipForm.invalid && hasSubmitted" class="alert alert-warning alert-dismissible fade show" role="alert">
-	<strong>Unable to Submit!</strong> You should check the forms again. There are some error inputs.
-	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-	<span aria-hidden="true">&times;</span>
-	</button>
+<div *ngIf="relationshipForm">
+	<div *ngIf="relationshipForm.invalid && hasSubmitted" class="alert alert-warning alert-dismissible fade show" role="alert">
+		<strong>Unable to Submit!</strong> You should check the forms again. There are some error inputs.
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<form novalidate (ngSubmit)="onSubmit()">
+		<div [formGroup]="relationshipForm.controls.person1">
+			<h4>{{relationshipForm.controls.person1_role.value}}</h4>
+			<div *ngFor="let question of questions" class="form-group" role="group">
+				<form-question [question]="question" [form]="relationshipForm.controls.person1"></form-question>
+			</div>
+		</div>
+		<div [formGroup]="relationshipForm.controls.person2">
+			<h4>{{relationshipForm.controls.person2_role.value}}</h4>
+			<div *ngFor="let question of questions" class="form-group" role="group">
+				<form-question [question]="question" [form]="relationshipForm.controls.person2"></form-question>
+			</div>
+		</div>
+		<button type="submit" class="btn btn-primary float-right" id="submitBtn" aria-label="Submit Form" title="Submit Form">Submit</button>
+	</form>
 </div>
-<form novalidate (ngSubmit)="onSubmit()">
-	<div [formGroup]="relationshipForm.controls.person1">
-		<h4>{{relationshipForm.controls.person1_role.value}}</h4>
-		<div *ngFor="let question of questions" class="form-group" role="group">
-			<form-question [question]="question" [form]="relationshipForm.controls.person1"></form-question>
-		</div>
-	</div>
-	<div [formGroup]="relationshipForm.controls.person2">
-		<h4>{{relationshipForm.controls.person2_role.value}}</h4>
-		<div *ngFor="let question of questions" class="form-group" role="group">
-			<form-question [question]="question" [form]="relationshipForm.controls.person2"></form-question>
-		</div>
-	</div>
-	<button type="submit" class="btn btn-primary float-right" id="submitBtn" aria-label="Submit Form" title="Submit Form">Submit</button>
-</form>

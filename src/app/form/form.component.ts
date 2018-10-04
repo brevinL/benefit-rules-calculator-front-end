@@ -22,30 +22,33 @@ export class FormComponent implements OnInit, OnDestroy {
 	busy: Subscription;
 
 	constructor(
-		protected fb: FormBuilder, 
-		protected questionService: QuestionService, 
-		protected qcs: QuestionControlService,
-		protected benefitRuleService: BenefitRuleService,
-		protected router: Router,
-		protected activatedRoute: ActivatedRoute) { }
+		private fb: FormBuilder, 
+		private questionService: QuestionService, 
+		private qcs: QuestionControlService,
+		private benefitRuleService: BenefitRuleService,
+		private router: Router,
+		private activatedRoute: ActivatedRoute) { }
 
 	ngOnInit() {
 		this.scrollToTop();
-		this.questions = this.questionService.questions;
-		this.relationshipForm = this.buildRelationshipFormGroup();
+		this.questionService.questions
+			.subscribe(questions => {
+				this.questions = questions;
+				this.relationshipForm = this.buildRelationshipFormGroup(questions);
+			});
 	}
 
-	buildRelationshipFormGroup(): FormGroup {
+	buildRelationshipFormGroup(questions: any[]): FormGroup {
 		return this.fb.group({
-			person1: this.buildPersonFormGroup(),
-			person2: this.buildPersonFormGroup(),
+			person1: this.buildPersonFormGroup(questions),
+			person2: this.buildPersonFormGroup(questions),
 			person1_role: this.fb.control(Role.BENEFICIARY),
 			person2_role: this.fb.control(Role.SPOUSE)
 		});
 	}
 
-	buildPersonFormGroup(): FormGroup { 
-		let formGroup = this.qcs.toFormGroup(this.questions);
+	buildPersonFormGroup(questions: any[]): FormGroup { 
+		let formGroup = this.qcs.toFormGroup(questions);
 		return formGroup;
 	}
 

@@ -1,11 +1,11 @@
-<div class="container-fluid">
-	<ul class="nav nav-tabs">
-		<li class="nav-item">
-			<a class="nav-link active" routerLink="/form/government-pension-offset">Government Pension Offset</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" routerLink="/form/windfall-elimination-provision">Windfall Elimination Provision</a>
-		</li>
-	</ul>
-	<router-outlet></router-outlet>
+<div class="grid">
+	<div class="breadORP" itemscope itemtype="http://schema.org/BreadcrumbList">
+	You are here: <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="https://www.ssa.gov/" itemprop="item"><span itemprop="name">Social Security Administration</span></a></span> &gt; <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="https://www.ssa.gov/retirementpolicy/index.html" itemprop="item"><span itemprop="name">Office of Retirement Policy</span></a></span> &gt; <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><span itemprop="name">Benefit Rules Calculator</span></span>
+	</div>
+	<div class="row-12">
+		<div class="container-fluid">
+			<h4>{{title}}</h4>
+			<router-outlet></router-outlet>
+		</div>
+	</div>
 </div>
