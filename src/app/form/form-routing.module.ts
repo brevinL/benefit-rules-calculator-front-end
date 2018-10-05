@@ -5,7 +5,6 @@ import { FormComponent } from './form.component';
 const routes: Routes = [
   {
     path: '',
-    component: FormComponent,
     children: [
     	{
     		path: 'government-pension-offset',

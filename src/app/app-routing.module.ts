@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-	{ path: '', redirectTo: '/form', pathMatch: 'full' },
+	{ path: '', redirectTo: '/form/government-pension-offset', pathMatch: 'full' },
 	{ 
 		path: 'form', 
 		loadChildren: 'app/form/form.module#FormModule',
