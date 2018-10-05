@@ -19,7 +19,7 @@ const API_URL = environment.api_url;
 
 @Injectable()
 export class QuestionService {
-	private url: string = `api/benefit-rule`;
+	private url: string = `benefit-rule`;
 	filter: string;
 
 	constructor(

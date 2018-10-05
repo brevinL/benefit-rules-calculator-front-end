@@ -17,7 +17,7 @@ const API_URL = environment.api_url;
 
 @Injectable()
 export class BenefitRuleService {
-	private url: string = `api/benefit-rule`;
+	private url: string = `benefit-rule`;
 
 	constructor(private http: HttpClient) {}
 
