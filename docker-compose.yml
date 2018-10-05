@@ -3,7 +3,7 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "81:80"
+      - "82:82"
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - ./dist:/etc/nginx/html
